@@ -1,0 +1,11 @@
+{
+  "name": "tweets",
+  "description": "Simple Streaming Twitter",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "4.x.x",
+    "jquery-tags-input": "^1.3.5",
+    "socket.io": "*",
+    "twit": "*"
+  }
+}

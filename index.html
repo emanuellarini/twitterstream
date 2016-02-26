@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>asdsadasdasd</title>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<style type="text/css">
+	.scrollable {
+		height: 800px;
+		overflow-y: auto;
+	}
+	</style>
+
+</head>
+<body>
+
+
+<div class="container">
+
+	<div class="page-header text-center">
+	  <h1>Express + Socket.io + Twitter API <small> search tweets </small></h1>
+	</div>
+
+	<div class="page-content text-center">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<div class="input-group">
+					<input id="search_input" type="text" class="form-control" placeholder="Digite as palavras..">
+					<span class="input-group-btn">
+						<button id="search_button" class="btn btn-default btn-primary" type="button">Pesquisar</button>
+						<button id="cancel_button" class="btn btn-default btn-danger" type="button">Parar</button>
+						<button id="clear_button" class="btn btn-default btn-success" type="button">Limpar</button>
+					</span>
+				</div><!-- /input-group -->
+				<code>Para pesquisar diversas palavras separe-as por vírgulas!</code>
+			</div><!-- /.col-lg-6 -->
+		</div><!-- /.row -->
+		<br/>
+		<div class="row" id="tweets" class="scrollable">
+		</div>
+	</div>
+</div>
+
+
+
+	<script src="/socket.io/socket.io.js"></script>
+   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+   	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+   	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/locale/pt-br.js"></script>
+	<script>
+		var socket = io.connect();
+
+	    socket.on('twitter-stream', function (tweet){   
+	        $("#tweets").prepend('<div class="well col-md-6 col-md-offset-3"><div class="media"><div class="media-left media-middle"><a href="#"><img class="thumbnail" src="'+tweet.user.profile_image_url+'"></a></div><div class="media-body"><h4 class="media-heading"><kbd>@'+tweet.user.screen_name+'</kbd></h4><p>'+tweet.text+'</p><p><mark>'+moment(new Date(tweet.created_at)).format("DD/MM/YYYY HH:mm:ss")+'</mark></p></div></div></div>').fadeIn("slow");
+	    });
+
+	    $('#search_button').click(function() {
+	    	if ($('#search_input').val() != ''){
+		    	$('#tweets').empty();
+		    	socket.emit('keyword-change', $('#search_input').val());
+	    	}
+	    });
+
+	    $('#clear_button').click(function(){
+	    	$('#tweets').empty();
+	    	$('#search_input').val('');
+	    	socket.emit('streaming-stop', false);
+	    });
+
+	    $('#cancel_button').click(function() {
+	    	socket.emit('streaming-stop', false);
+	    });
+	</script>
+
+</body>
+</html>
