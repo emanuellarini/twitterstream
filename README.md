@@ -10,7 +10,7 @@ As ferramentas utilizadas, são:
 - Bootstrap 3
 - jQuery
 
-## Installation
+## Instalação
 
 1. Faça um clone do Projeto
 2. Instale os pacotes do Node
